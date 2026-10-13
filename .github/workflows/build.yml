@@ -18,16 +18,15 @@ jobs:
         with:
           gradle-version: 8.9
       - run: gradle assembleDebug -PverCode=${{ github.run_number }} -PanalyticsUrl=${{ vars.ANALYTICS_URL }}
-        working-directory: JoyoseTool
+        working-directory: admin
       - name: Tạo Release
         env:
           GH_TOKEN: ${{ github.token }}
           GH_REPO: ${{ github.repository }}
         run: |
-          cp JoyoseTool/app/build/outputs/apk/debug/app-debug.apk td-exe.apk
-          cp JoyoseTool/admin/build/outputs/apk/debug/admin-debug.apk td-admin.apk
+          cp admin/admin/build/outputs/apk/debug/admin-debug.apk td-admin.apk
           gh release delete "v${{ github.run_number }}" --yes --cleanup-tag || true
-          gh release create "v${{ github.run_number }}" td-exe.apk td-admin.apk \
+          gh release create "v${{ github.run_number }}" td-admin.apk \
             --title "tđ.exe v${{ github.run_number }}" \
             --notes "Bản build số ${{ github.run_number }}" \
             --latest
